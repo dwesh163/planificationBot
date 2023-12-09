@@ -1,0 +1,23 @@
+{
+  "name": "planificationbot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dwesh163/planificationBot.git"
+  },
+  "author": "dwesh163",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dwesh163/planificationBot/issues"
+  },
+  "homepage": "https://github.com/dwesh163/planificationBot#readme",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "telegraf": "^4.15.3"
+  }
+}
