@@ -2,7 +2,7 @@ const cron = require("node-cron");
 const { exec } = require("child_process");
 
 cron.schedule("2 8 * * *", () => {
-  const dockerCommand = "docker run -d node:latest npm i && node main.js";
+  const dockerCommand = "/srv/planificationBot/rundocker.sh";
 
   exec(dockerCommand, (error, stdout, stderr) => {
     if (error) {
