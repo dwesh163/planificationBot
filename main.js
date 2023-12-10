@@ -52,8 +52,6 @@ async function fetchDate(url) {
         }
     }
   });
-
-  bot.telegram.sendMessage(parseInt(chatId), "Test : Done")
 }
 
 fetchDate("https://www.lac-bleu.ch/programmes/#6");
