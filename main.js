@@ -72,7 +72,7 @@ async function fetchDate(url) {
 	});
 
 	if (calculateDaysUntilNextDate(timeList) != 0) {
-		bot.telegram.sendMessage(parseInt(process.env.TEST_CHAT_ID), `Test : done - ${new Date().toLocaleString('FR')} - Days until : ${calculateDaysUntilNextDate(timeList)}`);
+		bot.telegram.sendMessage(parseInt(process.env.TEST_CHAT_ID), `Test : done\n${new Date().toLocaleString('FR')}\nDays until : ${calculateDaysUntilNextDate(timeList)}`);
 	}
 }
 
