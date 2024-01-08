@@ -23,18 +23,38 @@ function isInTime(dateString, number) {
 	return inputDate.getTime() === currentDateWithoutTime.getTime();
 }
 
+function calculateDaysUntilNextDate(dates) {
+	const dateObjects = dates.map((dateString) => {
+		const [day, month, year] = dateString.split('.').map(Number);
+		let date = new Date(year, month - 1, day);
+		date.setDate(date.getDate() - 14);
+		return date.setDate(date.getDate() - 14);
+	});
+
+	const currentDate = new Date();
+
+	const futureDates = dateObjects.filter((date) => date > currentDate);
+	futureDates.sort((a, b) => a - b);
+
+	let daysUntilNextDate = Math.ceil((futureDates[0] - currentDate) / (1000 * 60 * 60 * 24));
+
+	return daysUntilNextDate;
+}
+
 async function fetchDate(url) {
 	const response = await fetch(url);
 	const data = await response.text();
 	const root = parser.parse(data);
 
+	let timeList = [];
 	let DateLys = parser.parse(root.querySelector('#7').nextElementSibling.getElementsByTagName('table'));
 
 	DateLys.getElementsByTagName('tr').forEach((trElement) => {
 		if (trElement.classList.toString() != 'old') {
 			let info = parser.parse(trElement).getElementsByTagName('td').toString().replaceAll('<td>', '').replaceAll('</td>', '').split(',');
 			if (info != [''] && info[1] != undefined) {
-				if (isInTime(info[0].split('<br>')[0].replaceAll('A', '').replaceAll('S', '').replaceAll('[', '').replaceAll(']', ''), 14)) {
+				timeList.push(info[0].split('<br>')[0].replaceAll('A', '').replaceAll('S', '').replaceAll('[', '').replaceAll(']', '').replaceAll('J', '').replaceAll(' ', ''));
+				if (isInTime(info[0].split('<br>')[0].replaceAll('A', '').replaceAll('S', '').replaceAll('[', '').replaceAll(']', '').replaceAll('J', '').replaceAll(' ', ''), 14)) {
 					if ((parser.parse(info[1]).querySelector('span') != null && parser.parse(info[1]).querySelector('span').classList.toString() != 'conge') || parser.parse(info[1]).querySelector('span') == null) {
 						let infoSecondary = '';
 
@@ -50,7 +70,10 @@ async function fetchDate(url) {
 			}
 		}
 	});
-	bot.telegram.sendMessage(parseInt(process.env.TEST_CHAT_ID), `Test : done, ${new Date().toLocaleString('FR')}`);
+
+	if (calculateDaysUntilNextDate(timeList) != 0) {
+		bot.telegram.sendMessage(parseInt(process.env.TEST_CHAT_ID), `Test : done, ${new Date().toLocaleString('FR')} \nDays until : ${calculateDaysUntilNextDate(timeList)}`);
+	}
 }
 
 fetchDate('https://www.lac-bleu.ch/programmes/#6');
