@@ -54,7 +54,7 @@ async function fetchDate(url) {
 			let info = parser.parse(trElement).getElementsByTagName('td').toString().replaceAll('<td>', '').replaceAll('</td>', '').split(',');
 			if (info != [''] && info[1] != undefined) {
 				timeList.push(info[0].split('<br>')[0].replaceAll('A', '').replaceAll('S', '').replaceAll('[', '').replaceAll(']', '').replaceAll('J', '').replaceAll(' ', ''));
-				if (isInTime(info[0].split('<br>')[0].replaceAll('A', '').replaceAll('S', '').replaceAll('[', '').replaceAll(']', '').replaceAll('J', '').replaceAll(' ', ''), 14)) {
+				if (isInTime(info[0].split('<br>')[0], 14)) {
 					if ((parser.parse(info[1]).querySelector('span') != null && parser.parse(info[1]).querySelector('span').classList.toString() != 'conge') || parser.parse(info[1]).querySelector('span') == null) {
 						let infoSecondary = '';
 
@@ -62,8 +62,8 @@ async function fetchDate(url) {
 							infoSecondary = `(${parser.parse(info[1].split('<br>')[1]).text.toString()})`;
 						}
 
-						let messageText = `Qui sera présent à : ${parser.parse(info[1].split('<br>')[0]).text.toString()} ${infoSecondary} le ${info[0].replaceAll('<br>', ', ')}`;
-						bot.telegram.sendPoll(parseInt(chatId), messageText, pollOptions);
+						let messageText = `Qui sera présent à : ${parser.parse(info[1].split('<br>')[0]).text.toString()} ${infoSecondary}le ${info[0].replaceAll('<br>', ', ')}`;
+						bot.telegram.sendPoll(parseInt(chatId), messageText, pollOptions, { is_anonymous: false });
 						bot.telegram.sendMessage(parseInt(process.env.TEST_CHAT_ID), `Send : done, ${new Date().toLocaleString()}`);
 					}
 				}
